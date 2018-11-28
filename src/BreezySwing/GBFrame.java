@@ -492,7 +492,7 @@ import javax.swing.event.*;
       return addPanel(new GBPanel(this), row, col, width, height);
    }
 
-   private void add( Component c,int y, int x, int w, int h){
+   protected void add( Component c,int y, int x, int w, int h){
       gbc.gridx = x-1;
       gbc.gridy = y-1;
       gbc.gridwidth = w;

@@ -9,11 +9,10 @@ public class BankoBuddi extends GBFrame {
 	TreeMap<String, HashMap<String,Account>> users = new TreeMap<String, HashMap<String,Account>>();
 	static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	static JFrame screen = new BankoBuddi();
-	JLabel welcome  = addLabel("                                                                                                     "
-			+ "Welcome to BankoBuddi the most secure and trusted name in banking.", 1,1,1,1);
-	JButton login = addButton("Login", 2,1,1,1);
-	JButton createAccount = addButton("Create Account", 3,1,1,1);
-	JButton managerScreen = addButton("Manager Screen", 4,1,1,1);
+	JLabel welcome  = new JLabel("Welcome to BankoBuddi, the most secure and trusted name in banking",SwingConstants.CENTER);
+	JButton login = addButton("Login",2,1,1,1);
+	JButton createAccount = addButton("Create Account",3,1,1,1);
+	JButton managerScreen = addButton("Manager Screen",4,1,1,1);
 	//Create Account
 	JLabel username_Create = addLabel("Username",1,1,1,1);
 	JTextField usernameEntry_Create = addTextField("",1,2,1,1);
@@ -31,18 +30,22 @@ public class BankoBuddi extends GBFrame {
 	//Transaction Screen
 	
 	public BankoBuddi() {
-		hideLogin();
+		add(welcome,1,1,1,1);
 		hideCreateAccount();
+		hideLoginMenu();
+		hideManagerMenu();
 		mainMenu();
 		
 	}
 	
+
+	
 	//Does stuff with welcomeScreen buttons
 	public void buttonClicked(JButton button) {
 		//Main Screen
+		System.out.println("OKay");
 		if(button == login) {
-			hideMainMenu();
-			login();
+			message("1234567890asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		}
 		else if(button == createAccount) {
 			hideMainMenu();
@@ -89,17 +92,13 @@ public class BankoBuddi extends GBFrame {
 	}
 
 
-	public void login() {
+	public void loginMenu() {
 		//Show login menu
 
 	}
-	public void hideLogin() {
+	public void hideLoginMenu() {
 		//Hide login menu
-		username_Login.setVisible(false);
-		usernameEntry_Login.setVisible(false);
-		password_Login.setVisible(false);
-		passwordEntry_Login.setVisible(false);
-		login_Login.setVisible(false);
+
 	}
 	
 	public void mainMenu() {
@@ -141,21 +140,25 @@ public class BankoBuddi extends GBFrame {
 		usernameEntry_Create.setText("");
 	}
 	
-	public void managerScreen() {
+	public void managerMenu() {
+		
+	}
+	public void hideManagerMenu() {
 		
 	}
 	
 	public void message(String m) {
 		JFrame pop = new messageBox(m);
-		pop.setSize(750, 250);
+		pop.setSize((m.length()*10), 100);
 		pop.setLocation(dim.width / 2 - pop.getSize().width / 2, dim.height / 2 - pop.getSize().height / 2);
 		pop.setVisible(true);
 	}
 	
 	public class messageBox extends GBFrame{
-		JLabel message = addLabel("",1,1,1,1);
+		JLabel message = new JLabel("",SwingConstants.CENTER);
 		JButton ok = addButton("Ok",2,1,1,1);
 		public messageBox(String M){
+			add(message);
 			message.setText(M);
 		}
 		
