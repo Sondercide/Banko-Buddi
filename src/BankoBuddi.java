@@ -43,9 +43,8 @@ public class BankoBuddi extends GBFrame {
 	//Does stuff with welcomeScreen buttons
 	public void buttonClicked(JButton button) {
 		//Main Screen
-		System.out.println("OKay");
 		if(button == login) {
-			message("1234567890asdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			
 		}
 		else if(button == createAccount) {
 			hideMainMenu();
