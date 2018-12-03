@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.*;
@@ -14,13 +15,17 @@ public class BankoBuddi extends GBFrame {
 	JButton createAccount = addButton("Create Account",3,1,1,1);
 	JButton managerScreen = addButton("Manager Screen",4,1,1,1);
 	//Create Account
-	JLabel username_Create = addLabel("Username",1,1,1,1);
-	JTextField usernameEntry_Create = addTextField("",1,2,1,1);
-	JLabel password_Create = addLabel("Password",2,1,1,1);
-	JTextField passwordEntry_Create = addTextField("",2,2,1,1);
-	JLabel initDep_Create = addLabel("Initial Deposit",3,1,1,1);
-	JTextField initDepEntry_Create = addTextField("",3,2,1,1);
-	JButton create_Create = addButton("Create",3,1,2,1);
+	JLabel spacerLeft_Create = addLabel("",1,1,1,1);
+	JLabel spacerRight_Create = addLabel("",1,3,1,1);
+	JLabel username_Create = new JLabel("Username",SwingConstants.CENTER);
+	JTextField usernameEntry_Create = addTextField("",2,2,1,1);
+	JLabel password_Create = new JLabel("Password",SwingConstants.CENTER);
+	JLabel passwordConstraints_Create = new JLabel("Passwords must contian one lowercase letter, one upercase letter, one number, and be six characters long",SwingConstants.CENTER);
+	JTextField passwordEntry_Create = addTextField("",5,2,1,1);
+	JLabel initDep_Create = new JLabel("Initial Deposit",SwingConstants.CENTER);
+	JTextField initDepEntry_Create = addTextField("",7,2,1,1);
+	JButton create_Create = addButton("Create",8,2,1,1);
+	JButton cancel_Create = addButton("Cancel",9,2,1,1);
 	//Login Screen
 
 	//Manager Screen
@@ -31,6 +36,11 @@ public class BankoBuddi extends GBFrame {
 	
 	public BankoBuddi() {
 		add(welcome,1,1,1,1);
+		add(username_Create,1,2,1,1);
+		add(password_Create,4,2,1,1);
+		add(passwordConstraints_Create,5,2,1,1);
+		add(initDep_Create,6,2,1,1);
+		//screen.setBackground(Color.BLACK);
 		hideCreateAccount();
 		hideLoginMenu();
 		hideManagerMenu();
@@ -80,6 +90,10 @@ public class BankoBuddi extends GBFrame {
 			}
 			
 		}
+		else if (button == cancel_Create) {
+			hideCreateAccount();
+			mainMenu();
+		}
 	}
 
 
@@ -122,8 +136,12 @@ public class BankoBuddi extends GBFrame {
 		initDep_Create.setVisible(true);
 		passwordEntry_Create.setVisible(true);
 		password_Create.setVisible(true);
+		passwordConstraints_Create.setVisible(true);
 		usernameEntry_Create.setVisible(true);
 		username_Create.setVisible(true);
+		spacerRight_Create.setVisible(true);
+		spacerLeft_Create.setVisible(true);
+		cancel_Create.setVisible(true);
 	}
 	public void hideCreateAccount() {
 		//hide create account menu
@@ -131,12 +149,17 @@ public class BankoBuddi extends GBFrame {
 		initDepEntry_Create.setVisible(false);
 		initDep_Create.setVisible(false);
 		passwordEntry_Create.setVisible(false);
+		passwordConstraints_Create.setVisible(false);
 		password_Create.setVisible(false);
 		usernameEntry_Create.setVisible(false);
 		username_Create.setVisible(false);
-		
+		spacerLeft_Create.setVisible(false);
+		spacerRight_Create.setVisible(false);
+		cancel_Create.setVisible(false);
+
 		passwordEntry_Create.setText("");
 		usernameEntry_Create.setText("");
+		initDepEntry_Create.setText("");
 	}
 	
 	public void managerMenu() {
