@@ -27,6 +27,14 @@ public class BankoBuddi extends GBFrame {
 	JButton create_Create = addButton("Create",8,2,1,1);
 	JButton cancel_Create = addButton("Cancel",9,2,1,1);
 	//Login Screen
+	JLabel spacerLeft_Login = addLabel("",1,1,1,1);
+	JLabel spacerRight_Login = addLabel("",1,3,1,1);
+	JLabel username_Login = new JLabel("Username",SwingConstants.CENTER);
+	JTextField usernameEntry_Login = addTextField("",2,2,1,1);
+	JLabel password_Login = new JLabel("Password",SwingConstants.CENTER);
+	JTextField passwordEntry_Login = addTextField("",4,2,1,1);
+	JButton create_Login = addButton("Login",5,2,1,1);
+	JButton cancel_Login = addButton("Cancel",6,2,1,1);
 
 	//Manager Screen
 	
@@ -40,12 +48,13 @@ public class BankoBuddi extends GBFrame {
 		add(password_Create,4,2,1,1);
 		add(passwordConstraints_Create,5,2,1,1);
 		add(initDep_Create,6,2,1,1);
+		add(username_Login,1,2,1,1);
+		add(password_Login,3,2,1,1);
 		//screen.setBackground(Color.BLACK);
 		hideCreateAccount();
 		hideLoginMenu();
 		hideManagerMenu();
 		mainMenu();
-		
 	}
 	
 
@@ -54,6 +63,8 @@ public class BankoBuddi extends GBFrame {
 	public void buttonClicked(JButton button) {
 		//Main Screen
 		if(button == login) {
+			hideMainMenu();
+			loginMenu();
 			
 		}
 		else if(button == createAccount) {
@@ -93,7 +104,11 @@ public class BankoBuddi extends GBFrame {
 		else if (button == cancel_Create) {
 			hideCreateAccount();
 			mainMenu();
+		}	else if (button == 	cancel_Login) {
+			hideLoginMenu();
+			mainMenu();
 		}
+		
 	}
 
 
@@ -107,10 +122,33 @@ public class BankoBuddi extends GBFrame {
 
 	public void loginMenu() {
 		//Show login menu
+		cancel_Login.setVisible(true);
+		spacerLeft_Login.setVisible(true);
+		spacerRight_Login.setVisible(true);
+		username_Login.setVisible(true);
+		password_Login.setVisible(true);
+		create_Login.setVisible(true);
+		cancel_Login.setVisible(true);
+		username_Login.setVisible(true);
+		passwordEntry_Login.setVisible(true);
+		usernameEntry_Login.setVisible(true);
 
 	}
 	public void hideLoginMenu() {
 		//Hide login menu
+		spacerLeft_Login.setVisible(false);
+		spacerRight_Login.setVisible(false);
+		username_Login.setVisible(false);
+		password_Login.setVisible(false);
+		create_Login.setVisible(false);
+		cancel_Create.setVisible(false);
+		username_Login.setVisible(false);
+		passwordEntry_Login.setVisible(false);
+		usernameEntry_Login.setVisible(false);
+		cancel_Login.setVisible(false);
+		
+		passwordEntry_Login.setText("");
+		usernameEntry_Login.setText("");
 
 	}
 	
@@ -168,6 +206,19 @@ public class BankoBuddi extends GBFrame {
 	public void hideManagerMenu() {
 		
 	}
+	public void accountMenu() {
+		
+	}
+	public void hideAccountMenu() {
+		
+	}
+	public void tranactionMenu() {
+		
+	}
+	public void hideTranactionMenu() {
+		
+	}
+	
 	
 	public void message(String m) {
 		JFrame pop = new messageBox(m);
