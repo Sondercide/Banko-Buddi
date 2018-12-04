@@ -35,7 +35,7 @@ public class BankoBuddi extends GBFrame {
 	JTextField usernameEntry_Login = addTextField("",2,2,1,1);
 	JLabel password_Login = new JLabel("Password",SwingConstants.CENTER);
 	JTextField passwordEntry_Login = addTextField("",4,2,1,1);
-	JButton create_Login = addButton("Login",5,2,1,1);
+	JButton login_Login = addButton("Login",5,2,1,1);
 	JButton cancel_Login = addButton("Cancel",6,2,1,1);
 
 	//Manager Screen
@@ -89,7 +89,6 @@ public class BankoBuddi extends GBFrame {
 			String temp_username = usernameEntry_Create.getText();
 			String temp_password = passwordEntry_Create.getText();
 			Double temp_initDep = Double.parseDouble(initDepEntry_Create.getText());
-
 			//tests if that username is taken
 			if(users.containsKey(temp_username)) {
 				message("Username already exists. Please input a different username.");
@@ -104,14 +103,26 @@ public class BankoBuddi extends GBFrame {
 				users.get(temp_username).put(temp_password, new Account(temp_initDep));
 				hideCreateAccount();
 				mainMenu();
-				
 			}
-			
 		}
 		else if (button == cancel_Create) {
 			hideCreateAccount();
 			mainMenu();
-		}	else if (button == 	cancel_Login) {
+		}	
+		
+		
+		//Login
+		if(button == login_Login) {
+			if(!users.containsKey(usernameEntry_Login.getText()))
+				message("Incorrect Usename or Password");
+			else if(!users.get(usernameEntry_Login.getText()).containsKey(passwordEntry_Login.getText()))
+				message("Incorrect Username or Password");
+			else
+				message("Login good");
+			
+			
+		}
+		else if (button == 	cancel_Login) {
 			hideLoginMenu();
 			mainMenu();
 		}
@@ -134,7 +145,7 @@ public class BankoBuddi extends GBFrame {
 		spacerRight_Login.setVisible(true);
 		username_Login.setVisible(true);
 		password_Login.setVisible(true);
-		create_Login.setVisible(true);
+		login_Login.setVisible(true);
 		cancel_Login.setVisible(true);
 		username_Login.setVisible(true);
 		passwordEntry_Login.setVisible(true);
@@ -147,7 +158,7 @@ public class BankoBuddi extends GBFrame {
 		spacerRight_Login.setVisible(false);
 		username_Login.setVisible(false);
 		password_Login.setVisible(false);
-		create_Login.setVisible(false);
+		login_Login.setVisible(false);
 		cancel_Create.setVisible(false);
 		username_Login.setVisible(false);
 		passwordEntry_Login.setVisible(false);
