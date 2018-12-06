@@ -4,6 +4,10 @@ public class Account {
 	private double balance;
 	private ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 	
+	public Account() {
+		
+	}
+	
 	public Account(double b) {
 		this.balance = b;
 	}
@@ -24,6 +28,10 @@ public class Account {
 	
 	public double getBalance() {
 		return balance;
+	}
+	
+	public void setBalance(double a) {
+		balance = a;
 	}
 	
 	public ArrayList<String> getTransactions(){
