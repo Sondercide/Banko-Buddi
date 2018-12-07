@@ -3,20 +3,21 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
+
 import BreezySwing.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class BankoBuddi extends GBFrame {
-	
+
 	TreeMap<String, HashMap<String,Account>> users = new TreeMap<String, HashMap<String,Account>>();
 	static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	static JFrame screen = new BankoBuddi();
 	JLabel welcome  = new JLabel("Welcome to BankoBuddi, the most secure and trusted name in banking",SwingConstants.CENTER);
 	JButton login = addButton("Login",2,1,1,1);
 	JButton createAccount = addButton("Create Account",3,1,1,1);
-	JButton managerScreen = addButton("Manager Screen",4,1,1,1);
 	//Create Account
 	JLabel spacerLeft_Create = addLabel("",1,1,1,1);
 	JLabel spacerRight_Create = addLabel("",1,3,1,1);
@@ -31,8 +32,8 @@ public class BankoBuddi extends GBFrame {
 	JLabel initDepConstraints_Create = new JLabel("All deposits must only contain numbers",SwingConstants.CENTER);
 	JButton create_Create = addButton("Create",8,2,1,1);
 	JButton cancel_Create = addButton("Cancel",9,2,1,1);
-	
-	
+
+
 	//Login Screen
 	JLabel spacerLeft_Login = addLabel("",1,1,1,1);
 	JLabel spacerRight_Login = addLabel("",1,3,1,1);
@@ -44,7 +45,7 @@ public class BankoBuddi extends GBFrame {
 	JButton cancel_Login = addButton("Cancel",6,2,1,1);
 
 	//Manager Screen
-	
+
 	//Account Screen
 	JLabel welcome_Account  = new JLabel("Welcome to your BankoBuddi Account, how can we assit you today?",SwingConstants.CENTER);
 	JLabel spacerLeft_Account = addLabel("",1,1,1,1);
@@ -81,48 +82,50 @@ public class BankoBuddi extends GBFrame {
 		hideCreateAccount();
 		hideLoginMenu();
 		hideManagerMenu();
-		
+
 		mainMenu();
 	}
-	
+
 	Account current = new Account();
 	String currentUsername;
 	String currentPassword;
 	//Does stuff with welcomeScreen buttons
 	public void buttonClicked(JButton button) {
+		String p =("\\d+\\.?\\d*");
 		//Main Screen
 		if(button == login) {
 			hideMainMenu();
 			loginMenu();
-			
+
 		}
 		else if(button == createAccount) {
 			hideMainMenu();
 			createAccount();
 		}
-		else if(button == managerScreen) {
-			
-		}
-		
-		
+
+
 		//Create Account
 		if(button == create_Create) {
 			String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{6,}";
 			String temp_username = usernameEntry_Create.getText();
 			String temp_password = passwordEntry_Create.getText();
-			Double temp_initDep = Double.parseDouble(initDepEntry_Create.getText());
+			String temp_initDep = initDepEntry_Create.getText();
 			//tests if that username is taken
 			if(users.containsKey(temp_username)) {
-				message("Username already exists. Please input a different username.");
+				message("Username already exists. Please input a different username");
 			}
 			//tests if password is valid
 			else if(!temp_password.matches(pattern)) {
-				message("Poor password, please try again.");
+				message("Poor password, please try again");
 			}
+			else if(!temp_initDep.matches(p))
+				message("Please ensure your init deposit is a number");
 			//puts user into the treemap
 			else {
 				users.put(temp_username, new HashMap<String, Account>());
-				users.get(temp_username).put(temp_password, new Account(temp_initDep));
+				users.get(temp_username).put(temp_password, new Account());
+				users.get(temp_username).get(temp_password).deposit(Double.parseDouble(temp_initDep));
+				users.get(temp_username).put("Admin" , users.get(temp_username).get(temp_password));
 				message("Your account has been created");
 				hideCreateAccount();
 				mainMenu();
@@ -132,15 +135,16 @@ public class BankoBuddi extends GBFrame {
 			hideCreateAccount();
 			mainMenu();
 		}	
-		
-		
+
+
 		if(button == login_Login) {
 			if(!users.containsKey(usernameEntry_Login.getText()))
 				message("Incorrect Usename or Password");
 			else if(!users.get(usernameEntry_Login.getText()).containsKey(passwordEntry_Login.getText()))
 				message("Incorrect Username or Password");
 			else {
-				current = new Account(users.get(usernameEntry_Login.getText()).get(passwordEntry_Login.getText()).getBalance());
+				current = new Account(users.get(usernameEntry_Login.getText()).get(passwordEntry_Login.getText()).getBalance(),
+						users.get(usernameEntry_Login.getText()).get(passwordEntry_Login.getText()).getTransactions());
 				currentUsername = usernameEntry_Login.getText();
 				currentPassword = passwordEntry_Login.getText();
 				hideLoginMenu();
@@ -155,25 +159,32 @@ public class BankoBuddi extends GBFrame {
 		//account
 		if(button == withdrawAction_Account){
 			//Run Withdraw action here
-			double amount = Double.parseDouble(withdrawalEntry_Account.getText());
-			current.withdrawl(amount);
-			withdrawalEntry_Account.setText("");
-			message("$"+amount+" Withdrawn, Current Balance: $"+current.getBalance());
+			if(!withdrawalEntry_Account.getText().matches(p))
+				message("Please ensure your withdrawl is a number, then try agaain");
+			else {
+				double amount = Double.parseDouble(withdrawalEntry_Account.getText());
+				current.withdrawl(amount);
+				withdrawalEntry_Account.setText("");
+				message("$"+amount+" Withdrawn, Current Balance: $"+current.getBalance());
+			}
 		}
 		else if(button == depositAction_Account){
 			//Run Deposit action here
-			double amount = Double.parseDouble(depositEntry_Account.getText());
-			current.deposit(amount);
-			depositEntry_Account.setText("");
-			message("$"+amount+" Deposited, Current Balance: $"+current.getBalance());
+			if(!depositEntry_Account.getText().matches(p))
+				message("Please ensure your deposit is a number, then try agaain");
+			else {
+				double amount = Double.parseDouble(depositEntry_Account.getText());
+				current.deposit(amount);
+				depositEntry_Account.setText("");
+				message("$"+amount+" Deposited, Current Balance: $"+current.getBalance());
+			}
 		}
 		else if(button == viewTransaction_Account) {
-			transaction(current.getTransactions());
-//			hideAccountMenu();
-//			tranactionMenu();
+			transaction(current.getTransactionsToString());
 		}
 		else if(button == logout_Account){
 			users.get(currentUsername).get(currentPassword).setBalance(current.getBalance());
+			users.get(currentUsername).get(currentPassword).setTransactions(current.getTransactions());
 			current = new Account();
 			currentUsername = "";
 			currentPassword = "";
@@ -183,7 +194,7 @@ public class BankoBuddi extends GBFrame {
 		else if(button == showBalance_Account) {
 			message("Your Current Balance is $"+current.getBalance());
 		}
-
+		
 	}
 
 
@@ -207,7 +218,7 @@ public class BankoBuddi extends GBFrame {
 		username_Login.setVisible(true);
 		passwordEntry_Login.setVisible(true);
 		usernameEntry_Login.setVisible(true);
-		}
+	}
 	public void hideLoginMenu() {
 		//Hide login menu
 		spacerLeft_Login.setVisible(false);
@@ -220,26 +231,23 @@ public class BankoBuddi extends GBFrame {
 		passwordEntry_Login.setVisible(false);
 		usernameEntry_Login.setVisible(false);
 		cancel_Login.setVisible(false);
-		
-		
+
 		passwordEntry_Login.setText("");
 		usernameEntry_Login.setText("");
 
 	}
-	
+
 	public void mainMenu() {
 		//Show main menu
 		welcome.setVisible(true);
 		login.setVisible(true);
 		createAccount.setVisible(true);
-		managerScreen.setVisible(true);
 	}
 	public void hideMainMenu() {
 		//Hide main menu
 		welcome.setVisible(false);
 		login.setVisible(false);
 		createAccount.setVisible(false);
-		managerScreen.setVisible(false);
 	}
 
 	public void createAccount() {
@@ -278,14 +286,19 @@ public class BankoBuddi extends GBFrame {
 		usernameEntry_Create.setText("");
 		initDepEntry_Create.setText("");
 	}
-	
+
 	public void managerMenu() {
-		
+		Set<String> usernames = users.keySet();
+		int i = 1;
+		for(String s: usernames) {
+			add(new JLabel(s,SwingConstants.CENTER),i,1,1,1);
+			i++;
+		}
 	}
 	public void hideManagerMenu() {
-		
+
 	}
-	
+
 	public void accountMenu() {		
 		welcome_Account.setVisible(true);
 		spacerLeft_Account.setVisible(true);
@@ -320,16 +333,16 @@ public class BankoBuddi extends GBFrame {
 		depositEntry_Account.setText("");
 		withdrawalEntry_Account.setText("");
 	}
-	
-	
-	
+
+
+
 	public void message(String m) {
 		JFrame pop = new messageBox(m);
 		pop.setSize((m.length()*10), 100);
 		pop.setLocation(dim.width / 2 - pop.getSize().width / 2, dim.height / 2 - pop.getSize().height / 2);
 		pop.setVisible(true);
 	}
-	
+
 	public class messageBox extends GBFrame{
 		JLabel message = new JLabel("",SwingConstants.CENTER);
 		JButton ok = addButton("Ok",2,1,1,1);
@@ -337,21 +350,21 @@ public class BankoBuddi extends GBFrame {
 			add(message);
 			message.setText(M);
 		}
-		
+
 		public void buttonClicked(JButton button) {
 			setVisible(false);
 		}
 	}
-	
-	
-	
+
+
+
 	public void transaction(ArrayList<String> m) {
 		JFrame pop = new transactionBox(m);
-		pop.setSize(500, m.size()*100);
+		pop.setSize(500, 100+m.size()*25);
 		pop.setLocation(dim.width / 2 - pop.getSize().width / 2, dim.height / 2 - pop.getSize().height / 2);
 		pop.setVisible(true);
 	}
-	
+
 	public class transactionBox extends GBFrame{
 		JTextArea transactions = addTextArea("",3,1,1,10);
 		JLabel welcome = new JLabel("Here you can see all the transactions on your account",SwingConstants.CENTER);
@@ -362,10 +375,10 @@ public class BankoBuddi extends GBFrame {
 			for(String s: M)
 				transactions.append(s + "\n");
 		}
-		
+
 		public void buttonClicked(JButton button) {
 			setVisible(false);
 		}
 	}
-	
+
 }
